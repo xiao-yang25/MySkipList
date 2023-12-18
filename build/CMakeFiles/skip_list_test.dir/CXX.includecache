@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/xiaoyang/code/MySkipList/src/skip_list.h
+iostream
+-
+cstring
+-
+cstdlib
+-
+cmath
+-
+fstream
+-
+mutex
+-
+vector
+-
+memory
+-
+
+/home/xiaoyang/code/MySkipList/test/stress_test.cc
+iostream
+-
+chrono
+-
+thread
+-
+vector
+-
+random
+-
+../src/skip_list.h
+/home/xiaoyang/code/MySkipList/src/skip_list.h
+

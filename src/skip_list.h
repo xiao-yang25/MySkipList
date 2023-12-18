@@ -16,15 +16,15 @@
 #include <vector>
 #include <memory>
 
-#define STORE_FILE "store/dumpFile"  //转存的文件名
+#define STORE_FILE "config/dumpFile"  //转存的文件名
 
+template<typename K, typename V>
+using NodeVec = std::vector<std::shared_ptr<Node<K, V>>>;
 namespace node {
 //define K-V node
 template<typename K, typename V>
 class Node {
  public:
-  using NodeVec = std::vector<std::shared_ptr<Node<K, V>>>;
-
   Node() {}
   Node(K k, V v, int);
   ~Node();
@@ -129,7 +129,7 @@ int SkipList<K, V>::GetRandomLevel() {
 
 template<typename K, typename V>
 std::shared_ptr<node::Node<K, V>> SkipList<K, V>::CreateNode(const K k, const V v, int level) {
-  auto node = std::make_shared<Node<K, V>>(k, v, level);
+  auto node = std::make_shared<node::Node<K, V>>(k, v, level);
   return node;
 }
 
@@ -140,7 +140,7 @@ int SkipList<K, V>::InsertElement(const K key, const V value) {
   auto current = header_;
 
   //store last node ptr less than key for each level
-  auto update = NodeVec(max_level_+1);
+  auto update = NodeVec<K, V>(max_level_ + 1);
     
   for (int i = current_level_; i >= 0; i--) {
     while (current->forward_[i] != nullptr && current->forward_[i]->GetKey() < key) {
@@ -151,7 +151,7 @@ int SkipList<K, V>::InsertElement(const K key, const V value) {
   }
 
   //now reach 0 level, next node is where to insert
-  current = current->forward[0];
+  current = current->forward_[0];
   //if node exits, unlock then return
   if (current != nullptr && current->GetKey() == key) {
     std::cout << "key: " << key << ",exists" << std::endl;
@@ -175,8 +175,8 @@ int SkipList<K, V>::InsertElement(const K key, const V value) {
 
     //insert node
     for (int i = 0; i <= random_level; i++) {
-        inserted_node->forward[i] = update[i]->forward[i];
-        update[i]->forward[i] = inserted_node;
+        inserted_node->forward_[i] = update[i]->forward_[i];
+        update[i]->forward_[i] = inserted_node;
     }
     std::cout << "Successfully inserted key:" << key << ", value:" << value << std::endl;
     element_count_++;
@@ -189,8 +189,7 @@ template<typename K, typename V>
 void SkipList<K, V>::PrintList() {
   std::cout << "\n*****Skip List*****"<<"\n";
   for (int i = 0; i <= current_level_; i++) {
-    auto node = header_->forward[i];
-    Node<K, V> *node = this->_header->forward[i];
+    auto node = header_->forward_[i];
     std::cout << "Level " << i << ": ";
     while (node != nullptr) {
       std::cout << node->GetKey() << ":" << node->GetValue() << ";";
@@ -241,7 +240,7 @@ int SkipList<K, V>::Size() {
 
 template<typename K, typename V>
 void SkipList<K, V>::GetKeyValueFromString(const std::string& str, std::string* key, std::string* value) {
-  if (!is_valid_string(str)) {
+  if (!IsValidString(str)) {
     return;
   }
   //如key:value ，分别获取冒号前后的部分
@@ -264,9 +263,9 @@ bool SkipList<K, V>::IsValidString(const std::string& str) {
 
 template<typename K, typename V>
 void SkipList<K, V>::DeleteElement(K key) {
-  std::unique_lock<std::mutex> lck(mtx);
+  std::unique_lock<std::mutex> lck(mutex_);
   auto current = header_;
-  auto update = NodeVec(max_level_ + 1);
+  auto update = NodeVec<K, V>(max_level_ + 1);
   for (int i = current_level_; i >= 0; i--) {
     while (current->forward[i] != nullptr && current->forward[i]->GetKey() < key) {
       current = current->forward[i];
@@ -300,11 +299,11 @@ bool SkipList<K, V>::SearchElement(K key) {
   auto current = header_;
   //从最高层开始找
   for (int i = current_level_; i >= 0; i--) {
-    while (current->forward[i] != nullptr && current->forward[i]->GetKey() < key) {
-      current = current->forward[i];
+    while (current->forward_[i] != nullptr && current->forward_[i]->GetKey() < key) {
+      current = current->forward_[i];
     }
   }
-  current = current->forward[0];
+  current = current->forward_[0];
   //若相等则说明找到
   if (current && current->GetKey() == key) {
     std::cout << "Found key: " << key << ", value: " << current->GetValue() << std::endl;
