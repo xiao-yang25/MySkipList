@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/skip_list_exe.dir/src/main.cc.o"
-  "CMakeFiles/skip_list_exe.dir/src/main.cc.o.d"
   "skip_list_exe"
   "skip_list_exe.pdb"
 )

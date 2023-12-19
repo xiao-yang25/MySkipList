@@ -1,8 +1,8 @@
-/home/xiaoyang/myworkspace/mytproj/MySkipList/build/CMakeFiles/skip_list_exe.dir
-/home/xiaoyang/myworkspace/mytproj/MySkipList/build/CMakeFiles/skip_list_test.dir
-/home/xiaoyang/myworkspace/mytproj/MySkipList/build/CMakeFiles/edit_cache.dir
-/home/xiaoyang/myworkspace/mytproj/MySkipList/build/CMakeFiles/rebuild_cache.dir
-/home/xiaoyang/myworkspace/mytproj/MySkipList/build/CMakeFiles/list_install_components.dir
-/home/xiaoyang/myworkspace/mytproj/MySkipList/build/CMakeFiles/install.dir
-/home/xiaoyang/myworkspace/mytproj/MySkipList/build/CMakeFiles/install/local.dir
-/home/xiaoyang/myworkspace/mytproj/MySkipList/build/CMakeFiles/install/strip.dir
+/home/xiaoyang/code/MySkipList/build/CMakeFiles/install/strip.dir
+/home/xiaoyang/code/MySkipList/build/CMakeFiles/install/local.dir
+/home/xiaoyang/code/MySkipList/build/CMakeFiles/install.dir
+/home/xiaoyang/code/MySkipList/build/CMakeFiles/list_install_components.dir
+/home/xiaoyang/code/MySkipList/build/CMakeFiles/rebuild_cache.dir
+/home/xiaoyang/code/MySkipList/build/CMakeFiles/edit_cache.dir
+/home/xiaoyang/code/MySkipList/build/CMakeFiles/skip_list_test.dir
+/home/xiaoyang/code/MySkipList/build/CMakeFiles/skip_list_exe.dir

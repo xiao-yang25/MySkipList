@@ -10,7 +10,6 @@
 #include <iostream>
 #include <cstring>
 #include <cstdlib>
-#include <cmath>
 #include <fstream>
 #include <mutex> 
 #include <vector>
@@ -24,11 +23,15 @@ template<typename K, typename V>
 class Node {
  public:
   Node() {}
-  Node(K k, V v, int);
-  ~Node();
-  K GetKey() const;
-  V GetValue() const;
-  void SetValue(V);
+  ~Node() {}
+
+  Node(const K k, const V v, int level) 
+  : key_(k), value_(v), node_level_(level), 
+    forward_(level, nullptr) {}
+
+  K GetKey() const { return key_; }
+  V GetValue() const { return value_; }
+  void SetValue(V value) { value_ = value; }
 
   // use to store next Node for each level
   std::vector<std::shared_ptr<Node<K, V>>> forward_;
@@ -42,32 +45,6 @@ class Node {
 
 template<typename K, typename V>
 using NodeVec = std::vector<std::shared_ptr<node::Node<K, V>>>;
-
-template<typename K, typename V>
-Node<K, V>::Node(const K k, const V v, int level) 
-  : key_(k), value_(v), 
-    node_level_(level),
-    forward_(level, nullptr) {};
-
-template<typename K, typename V>
-Node<K, V>::~Node() {
-    
-};
-
-template<typename K, typename V>
-K Node<K, V>::GetKey() const {
-    return key_;
-};
-
-template<typename K, typename V>
-V Node<K, V>::GetValue() const {
-    return value_;
-};
-
-template<typename K, typename V>
-void Node<K, V>::SetValue(V value) {
-    value_ = value;
-};
 } //  namespace node
 
 namespace skip_list {
@@ -86,7 +63,7 @@ class SkipList {
   void DeleteElement(K);
   void DumpFile();
   void LoadFile();
-  int Size();
+  int Size() { return element_count_; }
 
  private:
   void GetKeyValueFromString(const std::string& str, std::string* key, std::string* value);
@@ -234,11 +211,6 @@ void SkipList<K, V>::LoadFile() {
     std::cout << "key:" << *key << "value:" << *value << std::endl;
   }
   file_reader_.close();
-}
-
-template<typename K, typename V>
-int SkipList<K, V>::Size() {
-  return element_count_;
 }
 
 template<typename K, typename V>
