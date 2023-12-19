@@ -1,1 +1,1 @@
-/usr/bin/c++     CMakeFiles/skip_list_test.dir/test/stress_test.cc.o  -o skip_list_test 
+/usr/bin/c++ CMakeFiles/skip_list_test.dir/test/stress_test.cc.o -o skip_list_test  -lpthread 

@@ -4,6 +4,7 @@
 #include <thread>
 #include <vector>
 #include <random>
+#include <functional>
 #include "../src/skip_list.h"
 
 namespace {
@@ -45,7 +46,7 @@ int main() {
 
     for (int i = 0; i < NUM_THREADS; i++ ) {
       std::cout << "main() : creating thread, " << i << std::endl;
-      threads.emplace_back(TestGetElement, i, gen);
+      threads.emplace_back(TestInsertElement, i, std::ref(gen));
     }
 
     for(auto& thread : threads) {
@@ -59,27 +60,27 @@ int main() {
     std::cout << "insert elapsed:" << elapsed.count() << std::endl;
   }
 
-  test_skip_list.PrintList();
+  // test_skip_list.PrintList();
 
-  {
-    std::vector<std::thread> threads(NUM_THREADS);
-    auto start = std::chrono::high_resolution_clock::now();
+  // {
+  //   std::vector<std::thread> threads(NUM_THREADS);
+  //   auto start = std::chrono::high_resolution_clock::now();
 
-    for(int i = 0; i < NUM_THREADS; i++ ) {
-      std::cout << "main() : creating thread, " << i << std::endl;
-      threads.emplace_back(TestGetElement, i, gen);
-    }
+  //   for(int i = 0; i < NUM_THREADS; i++ ) {
+  //     std::cout << "main() : creating thread, " << i << std::endl;
+  //     threads.emplace_back(TestGetElement, i, std::ref(gen));
+  //   }
 
-    for(auto& thread : threads) {
-      if (thread.joinable()) {
-        thread.join();
-      }
-    }
+  //   for(auto& thread : threads) {
+  //     if (thread.joinable()) {
+  //       thread.join();
+  //     }
+  //   }
 
-    auto finish = std::chrono::high_resolution_clock::now(); 
-    std::chrono::duration<double> elapsed = finish - start;
-    std::cout << "get elapsed:" << elapsed.count() << std::endl;
-  }
+  //   auto finish = std::chrono::high_resolution_clock::now(); 
+  //   std::chrono::duration<double> elapsed = finish - start;
+  //   std::cout << "get elapsed:" << elapsed.count() << std::endl;
+  // }
 
   return 0;
 }

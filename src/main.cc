@@ -1,6 +1,6 @@
-#include<iostream>
+#include <iostream>
 #include "skip_list.h"
-#define FILE_PATH "config/dumpFile"
+#define FILE_PATH "../config/dumpFile"
 
 int main() {
   skip_list::SkipList<int, std::string> skip_list(6);
@@ -17,7 +17,7 @@ int main() {
 
   skip_list.DumpFile();
 
-  // skip_list.load_file();
+  //skip_list.LoadFile();
 
   skip_list.SearchElement(9);
   skip_list.SearchElement(18);
