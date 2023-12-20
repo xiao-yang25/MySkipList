@@ -4,7 +4,8 @@
 
 int main() {
   skip_list::SkipList<int, std::string> skip_list(6);
-
+  // key use int, if use other type, need define compare func
+  // if want to modify type of key, modify LoadFile func as well
   skip_list.InsertElement(1, "是徒为静养"); 
   skip_list.InsertElement(3, "而不用克己工夫也"); 
   skip_list.InsertElement(7, "如此"); 

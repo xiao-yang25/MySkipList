@@ -55,19 +55,19 @@ class SkipList {
  public:
   SkipList(int);
   ~SkipList();
-  int GetRandomLevel();
+  int GetRandomLevel() const;
   std::shared_ptr<node::Node<K, V>> CreateNode(K, V, int);
   int InsertElement(K, V);
-  void PrintList();
-  bool SearchElement(K);
+  void PrintList() const ;
+  bool SearchElement(K) const;
   void DeleteElement(K);
   void DumpFile();
   void LoadFile();
-  int Size() { return element_count_; }
+  int Size() const { return element_count_; }
 
  private:
-  void GetKeyValueFromString(const std::string& str, std::string* key, std::string* value);
-  bool IsValidString(const std::string& str);
+  void GetKeyValueFromString(const std::string& str, std::string& key, std::string& value) const;
+  bool IsValidString(const std::string& str) const;
 
  private:
   int max_level_;
@@ -98,7 +98,7 @@ SkipList<K, V>::~SkipList() {
 }
 
 template<typename K, typename V>
-int SkipList<K, V>::GetRandomLevel() {
+int SkipList<K, V>::GetRandomLevel() const {
   int level = 1;
   while (rand() % 2) {
     level++;
@@ -138,8 +138,8 @@ int SkipList<K, V>::InsertElement(const K key, const V value) {
     lck.unlock();
     return 1;
   }
-  //如果current为空则说明此时在 0 level
-  //不为空则在update[0]和current之间插入
+  //if current is nullptr, now at 0 level
+  //not nullptr, insert between update[0] and current
   if (current == nullptr || current->GetKey() != key) {
     int random_level = GetRandomLevel();
 
@@ -154,7 +154,7 @@ int SkipList<K, V>::InsertElement(const K key, const V value) {
     auto inserted_node = CreateNode(key, value, random_level);
 
     //insert node
-    for (int i = 0; i < random_level; i++) {//<= 改为了<
+    for (int i = 0; i < random_level; i++) {
         inserted_node->forward_[i] = update[i]->forward_[i];
         update[i]->forward_[i] = inserted_node;
     }
@@ -166,7 +166,7 @@ int SkipList<K, V>::InsertElement(const K key, const V value) {
 }
 
 template<typename K, typename V>
-void SkipList<K, V>::PrintList() {
+void SkipList<K, V>::PrintList() const {
   std::cout << "\n*****Skip List*****"<<"\n";
   for (int i = 0; i <= current_level_; i++) {
     auto node = header_->forward_[i];
@@ -199,37 +199,36 @@ template<typename K, typename V>
 void SkipList<K, V>::LoadFile() {
   file_reader_.open(STORE_FILE);
   std::cout << "load_file-----------------" << std::endl;
-  std::string line;
-  std::string* key = new std::string();
-  std::string* value = new std::string();
-  while (getline(file_reader_, line)) {
-    GetKeyValueFromString(line, key ,value);
-    if (key->empty() || value->empty()) {
+  std::string str;
+  std::string key;
+  std::string value;
+  while (getline(file_reader_, str)) {
+    GetKeyValueFromString(str, key ,value);
+    if (key.empty() || value.empty()) {
       continue;
     }
-    InsertElement(*key, *value);
-    std::cout << "key:" << *key << "value:" << *value << std::endl;
+    InsertElement(key, value);
+    std::cout << "key:" << key << "value:" << value << std::endl;
   }
   file_reader_.close();
 }
 
 template<typename K, typename V>
-void SkipList<K, V>::GetKeyValueFromString(const std::string& str, std::string* key, std::string* value) {
+void SkipList<K, V>::GetKeyValueFromString
+    (const std::string& str, std::string& key, std::string& value) const{
   if (!IsValidString(str)) {
     return;
   }
-  //如key:value ，分别获取冒号前后的部分
-  *key = str.substr(0, str.find(delimiter));
-  *value = str.substr(str.find(delimiter)+1, str.length());
+  //eg: key:value ，get key and value
+  key = str.substr(0, str.find(delimiter));
+  value = str.substr(str.find(delimiter)+1, str.length());
 }
 
-//判断字符串是否合法
 template<typename K, typename V>
-bool SkipList<K, V>::IsValidString(const std::string& str) {
+bool SkipList<K, V>::IsValidString(const std::string& str) const {
   if (str.empty()) {
     return false;
   }
-  //如果没有找到 ： ,则说明该字符串不合法（npos通常用来表示没有找到要查找的对象）
   if (str.find(delimiter) == std::string::npos) {
     return false;
   }
@@ -261,25 +260,23 @@ void SkipList<K, V>::DeleteElement(K key) {
 
     std::cout << "Successfully deleted key "<< key << std::endl;
     element_count_ --;
-    //delete current;
   }
   lck.unlock();
   return;
 }
 
-//搜索结点
 template<typename K, typename V>
-bool SkipList<K, V>::SearchElement(K key) {
+bool SkipList<K, V>::SearchElement(K key) const {
   std::cout << "search_element-----------------" << std::endl;
   auto current = header_;
-  //从最高层开始找
+
   for (int i = current_level_; i >= 0; i--) {
     while (current->forward_[i] != nullptr && current->forward_[i]->GetKey() < key) {
       current = current->forward_[i];
     }
   }
   current = current->forward_[0];
-  //若相等则说明找到
+  
   if (current && current->GetKey() == key) {
     std::cout << "Found key: " << key << ", value: " << current->GetValue() << std::endl;
     return true;
