@@ -12,11 +12,6 @@ install(TARGETS ${PROJECT_NAME})
 
 add_executable(${PROJECT_NAME}_exe src/main.cc)
 target_link_libraries(${PROJECT_NAME}_exe ${PROJECT_NAME})
-# target_include_directories(${PROJECT_NAME}_exe
-#   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/)
 
 add_executable(${PROJECT_NAME}_test test/stress_test.cc)
 target_link_libraries(${PROJECT_NAME}_test ${PROJECT_NAME} pthread)
-# target_include_directories(${PROJECT_NAME}_test
-#   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/
-#   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/test/)

@@ -40,36 +40,13 @@ int main() {
   unsigned seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
   std::mt19937 gen(seed);
 
-  // {
-  //   std::vector<std::thread> threads(NUM_THREADS);
-  //   auto start = std::chrono::high_resolution_clock::now();
-
-  //   for (int i = 0; i < NUM_THREADS; i++ ) {
-  //     std::cout << "main() : creating thread, " << i << std::endl;
-  //     threads.emplace_back(TestInsertElement, i, std::ref(gen));
-  //   }
-
-  //   for(auto& thread : threads) {
-  //     if (thread.joinable()) {
-  //       thread.join();
-  //     }
-  //   }
-
-  //   auto finish = std::chrono::high_resolution_clock::now(); 
-  //   std::chrono::duration<double> elapsed = finish - start;
-  //   std::cout << "insert elapsed:" << elapsed.count() << std::endl;
-  //   std::cout << "test insert element end."  << std::endl;
-  // }
-
-  //test_skip_list.PrintList();
-
   {
     std::vector<std::thread> threads(NUM_THREADS);
     auto start = std::chrono::high_resolution_clock::now();
 
-    for(int i = 0; i < NUM_THREADS; i++ ) {
+    for (int i = 0; i < NUM_THREADS; i++ ) {
       std::cout << "main() : creating thread, " << i << std::endl;
-      threads.emplace_back(TestGetElement, i, std::ref(gen));
+      threads.emplace_back(TestInsertElement, i, std::ref(gen));
     }
 
     for(auto& thread : threads) {
@@ -80,9 +57,32 @@ int main() {
 
     auto finish = std::chrono::high_resolution_clock::now(); 
     std::chrono::duration<double> elapsed = finish - start;
-    std::cout << "get elapsed:" << elapsed.count() << std::endl;
-    std::cout << "test find element end."  << std::endl;
+    std::cout << "insert elapsed:" << elapsed.count() << std::endl;
+    std::cout << "test insert element end."  << std::endl;
   }
+
+  //test_skip_list.PrintList();
+
+  // {
+  //   std::vector<std::thread> threads(NUM_THREADS);
+  //   auto start = std::chrono::high_resolution_clock::now();
+
+  //   for(int i = 0; i < NUM_THREADS; i++ ) {
+  //     std::cout << "main() : creating thread, " << i << std::endl;
+  //     threads.emplace_back(TestGetElement, i, std::ref(gen));
+  //   }
+
+  //   for(auto& thread : threads) {
+  //     if (thread.joinable()) {
+  //       thread.join();
+  //     }
+  //   }
+
+  //   auto finish = std::chrono::high_resolution_clock::now(); 
+  //   std::chrono::duration<double> elapsed = finish - start;
+  //   std::cout << "get elapsed:" << elapsed.count() << std::endl;
+  //   std::cout << "test find element end."  << std::endl;
+  // }
 
   return 0;
 }

@@ -48,7 +48,7 @@ using NodeVec = std::vector<std::shared_ptr<node::Node<K, V>>>;
 } //  namespace node
 
 namespace skip_list {
-const std::string delimiter = ":";
+std::string delimiter = ":";
 //define skip_list
 template<typename K, typename V>
 class SkipList {
