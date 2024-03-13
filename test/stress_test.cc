@@ -23,17 +23,17 @@ void TestInsertElement(int tid, std::mt19937 &gen) {
   int count_each_thread = TEST_COUNT/NUM_THREADS; 
   for (int i = tid*count_each_thread, count = 0; count < count_each_thread; i++) {
     count++;
-	  test_skip_list.InsertElement(GetRandomNumber(gen) % TEST_COUNT, "rain"); 
+    test_skip_list.InsertElement(GetRandomNumber(gen) % TEST_COUNT, "rain"); 
   }
 }
 
 void TestGetElement(int tid, std::mt19937 &gen) {
   std::cout << tid << std::endl;  
   int count_each_thread = TEST_COUNT/NUM_THREADS; 
-	for (int i = tid*count_each_thread, count = 0; count < count_each_thread; i++) {
+  for (int i = tid*count_each_thread, count = 0; count < count_each_thread; i++) {
     count++;
-		test_skip_list.SearchElement(GetRandomNumber(gen) % TEST_COUNT); 
-	}
+    test_skip_list.SearchElement(GetRandomNumber(gen) % TEST_COUNT); 
+  }
 }
 
 int main() {
